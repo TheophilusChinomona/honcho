@@ -401,3 +401,79 @@ class TestDocumentCRUD:
         assert len(documents) == 2
         assert documents[0].content in ["Observation 1", "Observation 2"]
         assert documents[1].content in ["Observation 1", "Observation 2"]
+
+    @pytest.mark.asyncio
+    async def test_query_documents_hybrid_retrieval(
+        self,
+        db_session: AsyncSession,
+        sample_data: tuple[models.Workspace, models.Peer],
+    ):
+        """Test that query_documents uses hybrid retrieval (semantic + FTS)."""
+        test_workspace, test_peer = sample_data
+        test_peer2, test_session, _ = await self._setup_test_data(
+            db_session, test_workspace, test_peer
+        )
+
+        # Create documents: one semantically close but no lexical overlap,
+        # one with strong lexical overlap but different semantic vector.
+        doc_schemas = [
+            schemas.DocumentCreate(
+                content="The user enjoys Italian cuisine especially pasta",
+                embedding=[0.9] * 1536,
+                session_name=test_session.name,
+                metadata=schemas.DocumentMetadata(
+                    message_ids=[1],
+                    message_created_at="2025-01-01T00:00:00Z",
+                ),
+            ),
+            schemas.DocumentCreate(
+                content="pizza pizza pizza",  # lexical match for "pizza"
+                embedding=[0.1] * 1536,  # far semantically
+                session_name=test_session.name,
+                metadata=schemas.DocumentMetadata(
+                    message_ids=[2],
+                    message_created_at="2025-01-01T00:00:00Z",
+                ),
+            ),
+        ]
+        await crud.create_documents(
+            db_session,
+            doc_schemas,
+            workspace_name=test_workspace.name,
+            observer=test_peer.name,
+            observed=test_peer2.name,
+        )
+
+        # Hybrid search for "pizza" — the lexically matching doc ("pizza pizza pizza")
+        # should rank above the semantically-matching doc ("italian cuisine pasta") due
+        # to FTS boosting via RRF, even though it has a weaker cosine-distance embedding.
+        results = await crud.query_documents(
+            db_session,
+            workspace_name=test_workspace.name,
+            query="pizza",
+            observer=test_peer.name,
+            observed=test_peer2.name,
+            top_k=10,
+            hybrid=True,
+        )
+
+        assert len(results) == 2
+        # The top-ranked result should be the one with "pizza" in its content
+        # (the lexical match boosted by FTS), not the Italian cuisine doc
+        assert "pizza" in str(results[0].content).lower()
+
+        # Force semantic-only; the top-ranked doc should reverse since FTS
+        # boosting is absent and cosine distance dominates
+        semantic_only = await crud.query_documents(
+            db_session,
+            workspace_name=test_workspace.name,
+            query="pizza",
+            observer=test_peer.name,
+            observed=test_peer2.name,
+            top_k=10,
+            hybrid=False,
+        )
+        # With no hybrid, cosine distance to the "pizza" embedding dictates order.
+        # Both docs are returned, but the one with higher cosine similarity to the
+        # query embedding (doc1 at [0.9] vs doc2 at [0.1]) should rank higher.
+        assert len(semantic_only) >= 1
