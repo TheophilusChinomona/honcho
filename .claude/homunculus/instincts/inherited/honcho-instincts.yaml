@@ -1,0 +1,607 @@
+# Instincts generated from https://github.com/TheophilusChinomona/honcho
+# Generated: 2026-05-09T20:49:58.437Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: honcho-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: docs, fix, feat, ci, test
+
+## Evidence
+
+- 14 commits analyzed
+- Detected conventional commit pattern
+- Examples: feat(retrieval): hybrid document search with RRF, MMR, and lexical rerank, docs: add self-host and Athena integration deployment guide
+
+---
+id: honcho-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Commit Length
+
+## Action
+
+Write moderate-length commit messages (~65 characters)
+
+## Evidence
+
+- Average commit message length: 65 chars
+- Based on 14 commits
+
+---
+id: honcho-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: honcho-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: honcho-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: honcho-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Arch Type Based
+
+## Action
+
+Place code in the appropriate type folder (components/, services/, utils/, etc.)
+
+## Evidence
+
+- Type-based module organization detected
+- Folders: crud, dreamer, routers, utils
+
+---
+id: honcho-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: honcho-test-naming
+trigger: "when creating a test file"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Test Naming
+
+## Action
+
+Name test files using the pattern: *.test.ts
+
+## Evidence
+
+- File pattern: *.test.ts
+- Consistent across test files
+
+---
+id: honcho-workflow-feature-development
+trigger: "when implementing a new feature"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Workflow Feature Development
+
+## Action
+
+Follow the feature-development workflow:
+1. Add feature implementation
+2. Add tests for feature
+3. Update documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~15x per month
+- Files: **/*.test.*, **/api/**
+
+---
+id: honcho-workflow-feature-development-with-tests-and-config
+trigger: "when doing feature development with tests and config"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Workflow Feature Development With Tests And Config
+
+## Action
+
+Follow the feature-development-with-tests-and-config workflow:
+1. Update or add configuration in src/config.py
+2. Implement or modify logic in src/crud/ or src/utils/
+3. Update or add unit tests in tests/crud/ or tests/
+4. Optionally update related documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: src/config.py, src/crud/*.py, src/utils/*.py
+
+---
+id: honcho-workflow-bugfix-with-test-and-doc-update
+trigger: "when doing bugfix with test and doc update"
+confidence: 0.65
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Workflow Bugfix With Test And Doc Update
+
+## Action
+
+Follow the bugfix-with-test-and-doc-update workflow:
+1. Modify affected logic in src/utils/, src/crud/, or src/models.py
+2. Update or add related tests in tests/
+3. Update configuration or migration scripts if schema/index is involved
+4. Update documentation or deployment guides if needed
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~3x per month
+- Files: src/utils/*.py, src/crud/*.py, src/models.py
+
+---
+id: honcho-workflow-database-index-or-schema-migration
+trigger: "when doing database index or schema migration"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Workflow Database Index Or Schema Migration
+
+## Action
+
+Follow the database-index-or-schema-migration workflow:
+1. Create or modify migration script in migrations/versions/
+2. Update models in src/models.py
+3. Optionally update related logic in src/crud/ or src/utils/
+4. Update documentation if deployment steps change
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: migrations/versions/*.py, src/models.py, src/crud/*.py
+
+---
+id: honcho-workflow-deployment-and-branch-strategy-documentation
+trigger: "when doing deployment and branch strategy documentation"
+confidence: 0.65
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Workflow Deployment And Branch Strategy Documentation
+
+## Action
+
+Follow the deployment-and-branch-strategy-documentation workflow:
+1. Edit DEPLOYMENT.md or CLAUDE.md with new instructions
+2. Update .kilo/plans/*.md with promotion or deployment plans
+3. Optionally update README.md
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~3x per month
+- Files: DEPLOYMENT.md, CLAUDE.md, .kilo/plans/*.md
+
+---
+id: honcho-workflow-ci-cd-workflow-update
+trigger: "when doing ci cd workflow update"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/TheophilusChinomona/honcho
+---
+
+# Honcho Workflow Ci Cd Workflow Update
+
+## Action
+
+Follow the ci-cd-workflow-update workflow:
+1. Edit or remove files in .github/workflows/
+2. Update triggers or job definitions as needed
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: .github/workflows/*.yml
+
+---
+id: honcho-instinct-file-naming
+trigger: "When creating a new Python file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct File Naming
+
+## Action
+
+Name the file using camelCase (e.g., myModule.py)
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.files
+
+---
+id: honcho-instinct-function-naming
+trigger: "When defining a new function"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Function Naming
+
+## Action
+
+Use camelCase for function names (e.g., processData)
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.functions
+
+---
+id: honcho-instinct-class-naming
+trigger: "When defining a new class"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Class Naming
+
+## Action
+
+Use PascalCase for class names (e.g., DocumentManager)
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.classes
+
+---
+id: honcho-instinct-constant-naming
+trigger: "When defining a constant"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constants (e.g., MAX_SIZE)
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.constants
+
+---
+id: honcho-instinct-import-style
+trigger: "When importing modules in Python files"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Import Style
+
+## Action
+
+Use relative imports
+
+## Evidence
+
+- Pattern in codeStyle.importStyle
+
+---
+id: honcho-instinct-export-style
+trigger: "When exporting functions or classes"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle
+
+---
+id: honcho-instinct-test-file-location
+trigger: "When adding unit tests"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Test File Location
+
+## Action
+
+Place test files in the separate 'tests' directory, mirroring the structure of 'src'
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation
+- Example files in workflows
+
+---
+id: honcho-instinct-test-file-naming
+trigger: "When naming a test file"
+confidence: 0.7
+domain: testing
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Test File Naming
+
+## Action
+
+Use the pattern '*.test.ts' for test files
+
+## Evidence
+
+- Pattern in testing.filePattern
+
+---
+id: honcho-instinct-test-type
+trigger: "When writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Test Type
+
+## Action
+
+Write unit tests for new or changed logic
+
+## Evidence
+
+- Pattern in testing.testTypes
+- Workflow commit sequences
+
+---
+id: honcho-instinct-git-commit-format
+trigger: "When writing a commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Git Commit Format
+
+## Action
+
+Use conventional commit prefixes (feat, fix, docs, ci, test) and a short, descriptive message (~65 characters)
+
+## Evidence
+
+- Pattern in commits.prefixes
+- Example commits
+- commits.averageLength
+
+---
+id: honcho-instinct-feature-development
+trigger: "When adding a new capability or algorithm to the backend"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Feature Development
+
+## Action
+
+Update or add configuration in src/config.py, implement or modify logic in src/crud/ or src/utils/, add or update unit tests in tests/crud/ or tests/, and optionally update documentation
+
+## Evidence
+
+- Workflow: feature-development-with-tests-and-config
+- Example commit sequences and files
+
+---
+id: honcho-instinct-bugfix
+trigger: "When addressing a bug, regression, or review feedback"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Bugfix
+
+## Action
+
+Modify affected logic in src/utils/, src/crud/, or src/models.py, update or add related tests in tests/, update configuration or migration scripts if schema/index is involved, and update documentation if needed
+
+## Evidence
+
+- Workflow: bugfix-with-test-and-doc-update
+- Example commit sequences and files
+
+---
+id: honcho-instinct-database-migration
+trigger: "When optimizing database performance or changing schema"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Database Migration
+
+## Action
+
+Create or modify migration script in migrations/versions/, update models in src/models.py, optionally update related logic in src/crud/ or src/utils/, and update documentation if deployment steps change
+
+## Evidence
+
+- Workflow: database-index-or-schema-migration
+- Example commit sequences and files
+
+---
+id: honcho-instinct-deployment-docs-update
+trigger: "When deployment process, integration, or branch strategy changes"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Deployment Docs Update
+
+## Action
+
+Edit DEPLOYMENT.md or CLAUDE.md with new instructions, update .kilo/plans/*.md with promotion or deployment plans, and optionally update README.md
+
+## Evidence
+
+- Workflow: deployment-and-branch-strategy-documentation
+- Example commit sequences and files
+
+---
+id: honcho-instinct-ci-cd-update
+trigger: "When CI/CD process or deployment infrastructure changes"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: TheophilusChinomona/honcho
+---
+
+# Honcho Instinct Ci Cd Update
+
+## Action
+
+Edit or remove files in .github/workflows/ and update triggers or job definitions as needed
+
+## Evidence
+
+- Workflow: ci-cd-workflow-update
+- Example commit sequences and files
+
