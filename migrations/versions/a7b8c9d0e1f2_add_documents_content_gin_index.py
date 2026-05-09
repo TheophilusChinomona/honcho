@@ -29,9 +29,9 @@ def upgrade() -> None:
     connection = op.get_bind()
     inspector = sa.inspect(connection)
 
-    if not index_exists("documents", "idx_documents_content_gin", inspector):
+    if not index_exists("documents", "ix_documents_content_gin", inspector):
         op.create_index(
-            "idx_documents_content_gin",
+            "ix_documents_content_gin",
             "documents",
             [sa.text("to_tsvector('english', content)")],
             postgresql_using="gin",
@@ -43,9 +43,9 @@ def downgrade() -> None:
     connection = op.get_bind()
     inspector = sa.inspect(connection)
 
-    if index_exists("documents", "idx_documents_content_gin", inspector):
+    if index_exists("documents", "ix_documents_content_gin", inspector):
         op.drop_index(
-            "idx_documents_content_gin",
+            "ix_documents_content_gin",
             table_name="documents",
             schema=schema,
         )

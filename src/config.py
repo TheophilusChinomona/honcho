@@ -1316,6 +1316,9 @@ class AppSettings(HonchoSettings):
                 + "active or vector-store migration is incomplete"
             )
 
+        if "HYBRID_ENABLED" not in self.RETRIEVAL.model_fields_set:
+            self.RETRIEVAL.HYBRID_ENABLED = self.VECTOR_STORE.TYPE == "pgvector"
+
         return self
 
 

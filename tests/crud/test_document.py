@@ -416,10 +416,12 @@ class TestDocumentCRUD:
 
         # Create documents: one semantically close but no lexical overlap,
         # one with strong lexical overlap but different semantic vector.
+        doc1_embedding = [1.0] + ([0.0] * 1535)
+        doc2_embedding = [0.0, 1.0] + ([0.0] * 1534)
         doc_schemas = [
             schemas.DocumentCreate(
                 content="The user enjoys Italian cuisine especially pasta",
-                embedding=[0.9] * 1536,
+                embedding=doc1_embedding,
                 session_name=test_session.name,
                 metadata=schemas.DocumentMetadata(
                     message_ids=[1],
@@ -428,7 +430,7 @@ class TestDocumentCRUD:
             ),
             schemas.DocumentCreate(
                 content="pizza pizza pizza",  # lexical match for "pizza"
-                embedding=[0.1] * 1536,  # far semantically
+                embedding=doc2_embedding,  # far semantically
                 session_name=test_session.name,
                 metadata=schemas.DocumentMetadata(
                     message_ids=[2],
@@ -471,9 +473,11 @@ class TestDocumentCRUD:
             observer=test_peer.name,
             observed=test_peer2.name,
             top_k=10,
+            embedding=doc1_embedding,
             hybrid=False,
         )
-        # With no hybrid, cosine distance to the "pizza" embedding dictates order.
+        # With no hybrid, cosine distance to the explicit query embedding dictates order.
         # Both docs are returned, but the one with higher cosine similarity to the
-        # query embedding (doc1 at [0.9] vs doc2 at [0.1]) should rank higher.
-        assert len(semantic_only) >= 1
+        # query embedding (doc1) should rank higher.
+        assert len(semantic_only) == 2
+        assert "italian cuisine" in str(semantic_only[0].content).lower()

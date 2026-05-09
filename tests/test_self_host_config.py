@@ -39,6 +39,16 @@ class TestSelfHostConfig:
         auth = AuthSettings()
         assert auth.USE_AUTH is False
 
+    def test_hybrid_default_follows_vector_store_type(self):
+        """Hybrid retrieval defaults on for pgvector and off for external stores."""
+        from src.config import AppSettings
+
+        pgvector_settings = AppSettings(VECTOR_STORE={"TYPE": "pgvector"})
+        assert pgvector_settings.RETRIEVAL.HYBRID_ENABLED is True
+
+        external_store_settings = AppSettings(VECTOR_STORE={"TYPE": "lancedb"})
+        assert external_store_settings.RETRIEVAL.HYBRID_ENABLED is False
+
     def test_base_url_from_env(self, monkeypatch):
         """BASE_URL can be configured via environment variable."""
         monkeypatch.setenv("BASE_URL", "https://honcho.example.com")
