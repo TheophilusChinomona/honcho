@@ -3,6 +3,7 @@
 ## What This Guide Optimizes For
 
 This guide assumes:
+
 - you deploy Honcho separately from Athena
 - Athena is then pointed to that running Honcho instance
 - you prefer OpenRouter/OpenAI-compatible routing over direct OpenAI usage
@@ -99,14 +100,25 @@ EMBED_MESSAGES=true
 uv run alembic upgrade head
 ```
 
+**Known issue:** if you see "Multiple head revisions", run:
+
+```bash
+uv run alembic merge -m "merge heads" HEAD1 HEAD2
+uv run alembic upgrade head
+```
+
+(The repo ships with two independent migration branches from the document-index feature.)
+
 ### Start services
 
 Terminal 1:
+
 ```bash
 uv run fastapi dev src/main.py
 ```
 
 Terminal 2:
+
 ```bash
 uv run python -m src.deriver
 ```
@@ -165,6 +177,7 @@ Replace placeholders before running.
 ## 3) Athena/Honcho Identity Mapping
 
 Recommended multi-agent pattern:
+
 - one shared user peer per human user
 - one AI peer per Athena profile/agent
 - shared workspace for related profiles
@@ -197,6 +210,7 @@ This preserves per-agent identity while sharing user understanding.
 ## 6) Later CI/CD (not this step)
 
 After the external-service workflow is stable:
+
 - build/publish Athena + Honcho images from GitHub
 - deploy by SSH-triggered host update (`deploy.sh update` style)
 - keep Athena and Honcho as separate services for cleaner ops and rollback
