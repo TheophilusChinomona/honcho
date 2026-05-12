@@ -415,7 +415,9 @@ class TestCreateObservations:
         result = await create_observations(
             observations=[
                 schemas.ObservationInput(content="   ", level="explicit"),
-                schemas.ObservationInput(content=" trimmed observation ", level="explicit"),
+                schemas.ObservationInput(
+                    content=" trimmed observation ", level="explicit"
+                ),
             ],
             observer=peer1.name,
             observed=peer2.name,

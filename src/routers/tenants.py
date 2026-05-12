@@ -2,7 +2,7 @@
 
 import logging
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Body, Depends, HTTPException, Response
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import apaginate
 from sqlalchemy import select
@@ -60,9 +60,7 @@ async def get_tenant(
     db: AsyncSession = db,
 ):
     """Get a tenant by ID (admin-only)."""
-    tenant = await db.scalar(
-        select(TenantModel).where(TenantModel.id == tenant_id)
-    )
+    tenant = await db.scalar(select(TenantModel).where(TenantModel.id == tenant_id))
     if not tenant:
         raise HTTPException(status_code=404, detail="Tenant not found")
     return tenant
@@ -90,9 +88,7 @@ async def delete_tenant(
     db: AsyncSession = db,
 ):
     """Delete a tenant and all associated resources (admin-only)."""
-    tenant = await db.scalar(
-        select(TenantModel).where(TenantModel.id == tenant_id)
-    )
+    tenant = await db.scalar(select(TenantModel).where(TenantModel.id == tenant_id))
     if not tenant:
         raise HTTPException(status_code=404, detail="Tenant not found")
 

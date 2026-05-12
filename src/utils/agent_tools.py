@@ -808,7 +808,9 @@ async def create_observations(
         return ObservationsCreatedResult(created_count=0, created_levels=[], failed=[])
 
     normalized_observations = [
-        _normalized_observation_input(obs) for obs in observations if obs.content.strip()
+        _normalized_observation_input(obs)
+        for obs in observations
+        if obs.content.strip()
     ]
     if not normalized_observations:
         logger.info("No non-empty observations to create")

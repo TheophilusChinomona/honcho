@@ -127,9 +127,7 @@ class TestTenantAPI:
 
     async def test_create_tenant_with_admin(self, admin_client):
         """Admin can create tenants."""
-        response = await admin_client.post(
-            "/v3/tenants", json={"name": "admin-tenant"}
-        )
+        response = await admin_client.post("/v3/tenants", json={"name": "admin-tenant"})
         assert response.status_code == 201
         data = response.json()
         assert data["name"] == "admin-tenant"
@@ -138,9 +136,7 @@ class TestTenantAPI:
     async def test_create_duplicate_tenant(self, admin_client):
         """Creating a tenant with an existing name returns 409."""
         await admin_client.post("/v3/tenants", json={"name": "dup-tenant"})
-        response = await admin_client.post(
-            "/v3/tenants", json={"name": "dup-tenant"}
-        )
+        response = await admin_client.post("/v3/tenants", json={"name": "dup-tenant"})
         assert response.status_code == 409
 
     async def test_list_tenants_admin_only(self, client, admin_client):
@@ -183,9 +179,7 @@ class TestTenantAPI:
 
     async def test_workspace_with_tenant(self, admin_client):
         """Create a workspace assigned to a tenant."""
-        tenant_resp = await admin_client.post(
-            "/v3/tenants", json={"name": "ws-tenant"}
-        )
+        tenant_resp = await admin_client.post("/v3/tenants", json={"name": "ws-tenant"})
         tenant_id = tenant_resp.json()["id"]
 
         response = await admin_client.post(

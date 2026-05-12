@@ -110,9 +110,7 @@ class Tenant(Base):
     configuration: Mapped[dict[str, Any]] = mapped_column(
         JSONB, default=dict, server_default=text("'{}'::jsonb")
     )
-    admin_jwt_secret: Mapped[str | None] = mapped_column(
-        TEXT, nullable=True
-    )
+    admin_jwt_secret: Mapped[str | None] = mapped_column(TEXT, nullable=True)
 
     workspaces = relationship(
         "Workspace", back_populates="tenant", cascade="all, delete, delete-orphan"
