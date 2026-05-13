@@ -113,6 +113,7 @@ Read about the design philosophy and history of the project on our [blog](https:
 
 ## Project Structure
 
+- [Self-Hosting / Production](#self-hosting--production)
 - [Usage](#usage)
 - [Local Development](#local-development)
   - [Prerequisites and Dependencies](#prerequisites-and-dependencies)
@@ -147,6 +148,42 @@ Examples on how to use the SDK are located within each SDK folder and in the
 There are also documented examples of how to use the core SDKs in the
 [API Reference](https://docs.honcho.dev/api-reference/introduction) section of
 the documentation.
+
+## Self-Hosting / Production
+
+Honcho can be self-hosted for production use. The full runbook is in [`DEPLOYMENT.md`](./DEPLOYMENT.md).
+
+**Quick start:**
+
+```bash
+# 1. Clone and configure
+git clone https://github.com/TheophilusChinomona/honcho.git
+cd honcho
+cp .env.example .env        # edit DB credentials and API keys
+cp docker-compose.yml.example docker-compose.yml
+
+# 2. Start infrastructure
+docker compose up -d database redis
+
+# 3. Migrate
+uv run alembic upgrade head
+
+# 4. Start services (both required)
+# Option A — Procfile (Honcho/recommended)
+uv run honcho start
+
+# Option B — manual terminals
+uv run fastapi dev src/main.py          # Terminal 1: API server
+uv run python -m src.deriver            # Terminal 2: background worker
+```
+
+**Production notes:**
+
+- Both the API server and the background deriver worker must be running for memory extraction to work.
+- Honcho supports multi-tenancy via `Tenant` table. Migrations must be applied in order — see [`DEPLOYMENT.md`](./DEPLOYMENT.md) for known migration merge issues.
+- For LLM routing, OpenRouter is the recommended provider. See model override patterns below.
+
+---
 
 ## Usage
 
@@ -358,18 +395,24 @@ As an alternative to running Honcho locally it can also be run with the compose
 template.
 
 The docker-compose template is set to use an environment file called `.env`.
-You can also copy the `.env.template` and fill with the appropriate values.
 
 Copy the template and update the appropriate environment variables before
 launching the service:
 
 ```bash
 cd honcho
-cp .env.template .env
-# update the file with openai key and other wanted environment variables
+cp .env.example .env
+# update the file with your LLM provider key and database settings
 cp docker-compose.yml.example docker-compose.yml
+
+# Option A — Docker Compose (all-in-one)
 docker compose up
+
+# Option B — Procfile (honcho/recommended for prod)
+uv run honcho start
 ```
+
+> **Important:** Both the API server and the background deriver worker must be running for memory extraction and peer representation updates to work. The `docker-compose.yml` and `Procfile` both handle this. When running manually you need two terminals.
 
 ### Deploy on Fly
 

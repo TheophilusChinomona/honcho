@@ -111,17 +111,34 @@ uv run alembic upgrade head
 
 ### Start services
 
-Terminal 1:
+**Option A — Procfile (recommended):**
+
+```bash
+# Requires honcho CLI installed via uv sync
+uv run honcho start
+```
+
+This starts both the web server and deriver worker from the `Procfile`.
+
+**Option B — manual terminals:**
+
+Terminal 1 (API server):
 
 ```bash
 uv run fastapi dev src/main.py
 ```
 
-Terminal 2:
+Terminal 2 (background deriver):
 
 ```bash
 uv run python -m src.deriver
 ```
+
+> **Important:** Both processes must be running. Without the deriver, messages will be stored but no observations, summaries, or peer representations will be extracted.
+
+### Multi-tenancy
+
+Honcho supports multiple tenants via the `Tenant` table. Each workspace belongs to a tenant. For simple single-tenant self-hosting, the migration creates a default tenant automatically.
 
 ### Verify Honcho
 
