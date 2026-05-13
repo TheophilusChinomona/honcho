@@ -221,6 +221,13 @@ This preserves per-agent identity while sharing user understanding.
   - verify `baseUrl` in `honcho.json` and `curl <baseUrl>/health`
 - no observations being derived
   - ensure deriver process is running
+- **500 errors on peer chat or deriver crashes**
+  - Verify you set `DERIVER_MODEL_CONFIG__OVERRIDES__API_KEY_ENV` to point to the actual env var that holds your key (e.g. `OPENROUTER_API_KEY` or `OPENAI_API_KEY`)
+  - Confirm `OVERRIDES__BASE_URL` matches your provider endpoint
+- **Embedding errors on OpenRouter free tier**
+  - OpenRouter free models (`:free`) do not support embedding endpoints
+  - Set `EMBED_MESSAGES=false` to disable vector embeddings entirely
+  - Memory will fall back to non-vector observation extraction and direct message history
 
 ---
 
